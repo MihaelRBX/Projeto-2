@@ -12,6 +12,16 @@ saldo = 0
 TENTATIVA_SENHA = 3
 
 
+def imprimeEscolhas():
+    print('MACK BANK - ESCOLHA UMA OPCÃO')
+    print('   (1)   CADASTRAR CONTA CORRENTE')
+    print('   (2)   DEPOSITAR')
+    print('   (3)   SACAR')
+    print('   (4)   CONSULTAR SALDO')
+    print('   (5)   CONSULTAR EXTRATO')
+    print('   (6)   FINALIZAR')
+
+
 def cadastrar_conta_corrente():
     global cadastro_realizado
     global numero_conta
@@ -67,7 +77,8 @@ def cadastrar_conta_corrente():
 
     cadastro_realizado = True
 
-    input('CADASTRO REALIZADO! PRESSIONE UMA TECLA PARA VOLTAR AO MENU...')
+    input('CADASTRO REALIZADO! PRESSIONE ENTER PARA VOLTAR AO MENU...')
+    os.system('cls')
 
 
 def depositar():
@@ -118,6 +129,7 @@ def sacar():
         valor_saque = float(input('VALOR DO SAQUE: R$'))
     if valor_saque <= saldo:
         saldo -= valor_saque
+        print('SAQUE REALIZADO COM SUCESSO!\n')
     elif valor_saque <= saldo + limite_credito:
         print('VOCÊ ESTÁ USANDO O SEU LIMITE DE CRÉDITO')
         if saldo:
@@ -126,12 +138,16 @@ def sacar():
             limite_credito -= saque_credito
         else:
             limite_credito -= valor_saque
+        print('SAQUE REALIZADO COM SUCESSO!\n')
     else:
         print('SALDO INSUFICIENTE NA CONTA.')
+        print('SAQUE NÃO FOI REALIZADO!\n')
+        return
     lista_de_operacoes[1].append(valor_saque)
 
 
 def consultar_saldo():
+    global TENTATIVA_SENHA
     print('MACK BANK - CONSULTA SALDO')
     saldo_conta = int(input('INFORME O NÚMERO DA CONTA: '))
     while saldo_conta != numero_conta:
@@ -147,14 +163,14 @@ def consultar_saldo():
             return
         saldo_senha = getpass.getpass('INFORME A SENHA: ')
     TENTATIVA_SENHA = 3
-    print('SENHA INCORRETA! Tente novamente.')
-    saldo_senha = getpass.getpass('INFORME A SENHA: ')
     print(f'SALDO EM CONTA: R${saldo:,.2f}')
     print(f'LIMITE DE CRÉDITO: R${limite_credito:,.2f}')
-    input('CADASTRO REALIZADO! CONFIRME UMA TECLA PARA VOLTAR AO MENU...')
+    input('PRESSIONE ENTER PARA VOLTAR AO MENU...')
+    os.system('cls')
 
 
 def consultar_extrato():
+    global TENTATIVA_SENHA
     print('MACK BANK - EXTRADO DA CONTA')
     extrato_conta = int(input('INFORME O NÚMERO DA CONTA: '))
     while extrato_conta != numero_conta:
@@ -172,20 +188,15 @@ def consultar_extrato():
     TENTATIVA_SENHA = 3
     print(f'LIMITE DE CRÉDITO: R${limite_credito:,.2f}')
     print('ÚLTIMAS OPERAÇÕES:')
-
-
-def imprimeEscolhas():
-    print('MACK BANK - ESCOLHA UMA OPCÃO')
-    print('   (1)   CADASTRAR CONTA CORRENTE')
-    print('   (2)   DEPOSITAR')
-    print('   (3)   SACAR')
-    print('   (4)   CONSULTAR SALDO')
-    print('   (5)   CONSULTAR EXTRATO')
-    print('   (6)   FINALIZAR')
+    for deposito in lista_de_operacoes[0]:
+        print(f'DEPÓSITO: R${deposito:,.2f}')
+    for saque in lista_de_operacoes[1]:
+        print(f'SAQUE: R${saque:,.2f}')
+    input('PRESSIONE ENTER PARA VOLTAR AO MENU...')
+    os.system('cls')
 
 
 def finalizar():
-    print('Você escolheu a opção para finalizar o programa.\n')
     print('MACK BANK - SOBRE')
     print('Este programa foi desenvolvido por:')
     print('Mihael Rommel Barbosa Xavier - 32307861')
@@ -251,5 +262,4 @@ while True:
     # FINALIZAR
     elif opcao == 6:
         finalizar()
-        print(lista_de_operacoes)
         break
