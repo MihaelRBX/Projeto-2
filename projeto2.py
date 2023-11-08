@@ -110,17 +110,19 @@ def depositar():
     if limite_credito < credito_inicial:
         diferenca = credito_inicial - limite_credito
         if valor_deposito < diferenca:
+            limite_credito += valor_deposito
+            print(
+                f'{vermelho}ATENÇÃO{branco}: R${valor_deposito:,.2f}  foi utilizado para pagar o crédito usado.')
             valor_deposito = 0
         else:
             valor_deposito -= diferenca
-        limite_credito += diferenca
-        print(f'{vermelho}ATENÇÃO{branco}: R${diferenca:,.2f} do seu depósito foi utilizado para pagar o crédito usado.')
-        print(
-            f'O restante (R${valor_deposito:,.2f}) foi depositado em sua conta corrente.')
-    if saldo == saldo_inicial:
+            limite_credito += diferenca
+            print(
+                f'{vermelho}ATENÇÃO{branco}: R${diferenca:,.2f} do seu depósito foi utilizado para pagar o crédito usado.')
+            print(
+                f'O restante (R${valor_deposito:,.2f}) foi depositado em sua conta corrente.')
         saldo += valor_deposito
-    else:
-        saldo += valor_deposito + saldo_inicial
+
     print('\nDEPÓSITO REALIZADO COM SUCESSO!\n')
 
 
@@ -188,7 +190,8 @@ def consultar_saldo():
         saldo_senha = getpass.getpass('INFORME A SENHA: ')
     TENTATIVA_SENHA = 3
     print(f'SALDO EM CONTA: R${saldo:,.2f}')
-    print(f'LIMITE DE CRÉDITO: R${limite_credito:,.2f}\n')
+    print(f'LIMITE DE CRÉDITO INICIAL: R${credito_inicial:,.2f}')
+    print(f'LIMITE DE CRÉDITO RESTABTE: R${limite_credito:,.2f}\n')
     input('PRESSIONE ENTER PARA VOLTAR AO MENU...')
     os.system('cls')
 
@@ -211,7 +214,8 @@ def consultar_extrato():
             return
         extrato_senha = getpass.getpass('INFORME A SENHA: ')
     TENTATIVA_SENHA = 3
-    print(f'LIMITE DE CRÉDITO: R${limite_credito:,.2f}')
+    print(f'LIMITE DE CRÉDITO INICIAL: R${credito_inicial:,.2f}')
+    print(f'LIMITE DE CRÉDITO RESTANTE: R${limite_credito:,.2f}')
     if limite_credito < credito_inicial:
         print(f'{vermelho}ATENÇÃO{branco}: você já utilizou R${(credito_inicial - limite_credito):,.2f} do seu limite')
     print('ÚLTIMAS OPERAÇÕES:')
