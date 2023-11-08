@@ -9,7 +9,7 @@ import os
 cadastro_realizado = False
 lista_de_operacoes = [[], []]
 saldo = 0
-TENTATIVA_SENHA = 5
+TENTATIVA_SENHA = 3
 
 
 def cadastrar_conta_corrente():
@@ -111,7 +111,7 @@ def sacar():
             print("OPERAÇÃO BLOQUEDA!")
             return
         saque_senha = getpass.getpass('INFORME A SENHA: ')
-    TENTATIVA_SENHA = 5
+    TENTATIVA_SENHA = 3
     valor_saque = float(input('VALOR DO SAQUE: R$'))
     while valor_saque <= 0:
         print('O valor do saque deve ser maior que R$ 0,00! Por favor, insira um valór válido. ')
@@ -132,7 +132,6 @@ def sacar():
 
 
 def consultar_saldo():
-    print('Você escolheu a opção para consulta de saldo.')
     print('MACK BANK - CONSULTA SALDO')
     saldo_conta = int(input('INFORME O NÚMERO DA CONTA: '))
     while saldo_conta != numero_conta:
@@ -141,15 +140,21 @@ def consultar_saldo():
     print(f'NOME DO CLIENTE: {nome_cliente}')
     saldo_senha = getpass.getpass('INFORME A SENHA: ')
     while saldo_senha != senha:
-        print('SENHA INCORRETA! Tente novamente.')
+        TENTATIVA_SENHA -= 1
+        print(f'SENHA INCORRETA! Você tem mais {TENTATIVA_SENHA} chances.')
+        if TENTATIVA_SENHA == 0:
+            print("OPERAÇÃO BLOQUEDA!")
+            return
         saldo_senha = getpass.getpass('INFORME A SENHA: ')
+    TENTATIVA_SENHA = 3
+    print('SENHA INCORRETA! Tente novamente.')
+    saldo_senha = getpass.getpass('INFORME A SENHA: ')
     print(f'SALDO EM CONTA: R${saldo:,.2f}')
     print(f'LIMITE DE CRÉDITO: R${limite_credito:,.2f}')
     input('CADASTRO REALIZADO! CONFIRME UMA TECLA PARA VOLTAR AO MENU...')
 
 
 def consultar_extrato():
-    print('Você escolheu a opção para consulta de extrato.')
     print('MACK BANK - EXTRADO DA CONTA')
     extrato_conta = int(input('INFORME O NÚMERO DA CONTA: '))
     while extrato_conta != numero_conta:
@@ -158,8 +163,13 @@ def consultar_extrato():
     print(f'NOME DO CLIENTE: {nome_cliente}')
     extrato_senha = getpass.getpass('INFORME A SENHA: ')
     while extrato_senha != senha:
-        print('SENHA INCORRETA! Tente novamente.')
+        TENTATIVA_SENHA -= 1
+        print(f'SENHA INCORRETA! Você tem mais {TENTATIVA_SENHA} chances.')
+        if TENTATIVA_SENHA == 0:
+            print("OPERAÇÃO BLOQUEDA!")
+            return
         extrato_senha = getpass.getpass('INFORME A SENHA: ')
+    TENTATIVA_SENHA = 3
     print(f'LIMITE DE CRÉDITO: R${limite_credito:,.2f}')
     print('ÚLTIMAS OPERAÇÕES:')
 
