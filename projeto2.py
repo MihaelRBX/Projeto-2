@@ -109,7 +109,10 @@ def depositar():
     lista_de_operacoes[0].append(valor_deposito)
     if limite_credito < credito_inicial:
         diferenca = credito_inicial - limite_credito
-        valor_deposito -= diferenca
+        if valor_deposito < diferenca:
+            valor_deposito = 0
+        else:
+            valor_deposito -= diferenca
         limite_credito += diferenca
         print(f'{vermelho}ATENÇÃO{branco}: R${diferenca:,.2f} do seu depósito foi utilizado para pagar o crédito usado.')
         print(
