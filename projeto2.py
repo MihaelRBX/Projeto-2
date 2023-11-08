@@ -2,18 +2,15 @@
 # Mihael Rommel Barbosa Xavier - 32307861
 # David Wei Bo Pan - 32330138
 
+#  o comando 'cls' do os.system('cls') funciona apenas para windows
+
 import random
 import getpass
 import os
 
 vermelho = '\033[31m'
 verde = '\033[32m'
-ciano = '\033[36m'
-amarelo = '\033[33m'
 branco = '\033[37m'
-# azul = '\033[34m'
-# preto = '\033[30m'
-# magenta = '\033[35m'
 
 cadastro_realizado = False
 lista_de_operacoes = [[], []]
@@ -47,8 +44,9 @@ def cadastrar_conta_corrente():
 
     print('MACK BANK - CADASTRO DE CONTA')
 
-    numero_conta = 1234  # random.randint(1000, 9999)
-    print('NÚMERO DA CONTA: ', numero_conta)
+    numero_conta = random.randint(1000, 9999)
+    print('NÚMERO DA CONTA: ', numero_conta,
+          f'{vermelho}(NÃO PERCA!){branco}')
 
     nome_cliente = input('NOME DO CLIENTE: ').title()
     while not nome_cliente:
@@ -191,7 +189,7 @@ def consultar_saldo():
     TENTATIVA_SENHA = 3
     print(f'SALDO EM CONTA: R${saldo:,.2f}')
     print(f'LIMITE DE CRÉDITO INICIAL: R${credito_inicial:,.2f}')
-    print(f'LIMITE DE CRÉDITO RESTABTE: R${limite_credito:,.2f}\n')
+    print(f'LIMITE DE CRÉDITO RESTANTE: R${limite_credito:,.2f}\n')
     input('PRESSIONE ENTER PARA VOLTAR AO MENU...')
     os.system('cls')
 
@@ -234,8 +232,6 @@ def finalizar():
     print('Mihael Rommel Barbosa Xavier - 32307861')
     print('Pedro Henrique Mansano Fernandes - 42303885')
     print('David Wei Bo Pan - 32330138')
-
-    # Lógica do programa
 
 
 while True:
@@ -293,5 +289,6 @@ while True:
 
     # FINALIZAR
     elif opcao == 6:
+        os.system('cls')
         finalizar()
         break
