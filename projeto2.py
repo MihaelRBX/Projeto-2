@@ -6,6 +6,15 @@ import random
 import getpass
 import os
 
+vermelho = '\033[31m'
+verde = '\033[32m'
+ciano = '\033[36m'
+amarelo = '\033[33m'
+branco = '\033[37m'
+# azul = '\033[34m'
+# preto = '\033[30m'
+# magenta = '\033[35m'
+
 cadastro_realizado = False
 lista_de_operacoes = [[], []]
 saldo = 0
@@ -30,6 +39,7 @@ def cadastrar_conta_corrente():
     global saldo_inicial
     global saldo
     global limite_credito
+    global credito_inicial
 
     if cadastro_realizado:
         print('Você já realizou o cadastro uma vez. Não é permitido cadastrar mais de uma vez.\n')
@@ -64,6 +74,7 @@ def cadastrar_conta_corrente():
     while limite_credito < 0:
         print('O limite de crédito não pode ser menor que 0.')
         limite_credito = float(input('LIMITE DE CRÉDITO: R$ '))
+    credito_inicial = limite_credito
 
     senha = getpass.getpass('SENHA..........: ')
     while len(senha) != 6:
@@ -77,12 +88,14 @@ def cadastrar_conta_corrente():
 
     cadastro_realizado = True
 
-    input('CADASTRO REALIZADO! PRESSIONE ENTER PARA VOLTAR AO MENU...')
+    input('\nCADASTRO REALIZADO! PRESSIONE ENTER PARA VOLTAR AO MENU...')
     os.system('cls')
 
 
 def depositar():
     global saldo
+    global credito_inicial
+    global limite_credito
     print('MACK BANK - DEPÓSITO EN CONTA')
     depositar_conta = int(input('INFORME O NÚMERO DA CONTA: '))
     while depositar_conta != numero_conta:
@@ -94,17 +107,25 @@ def depositar():
         print('O valor do depósito deve ser maior que R$ 0,00! Por favor, insira um valór válido. ')
         valor_deposito = float(input('VALOR DO DEPÓSITO: R$'))
     lista_de_operacoes[0].append(valor_deposito)
+    if limite_credito < credito_inicial:
+        diferenca = credito_inicial - limite_credito
+        valor_deposito -= diferenca
+        limite_credito += diferenca
+        print(f'{vermelho}ATENÇÃO{branco}: R${diferenca:,.2f} do seu depósito foi utilizado para pagar o crédito usado.')
+        print(
+            f'O restante (R${valor_deposito:,.2f}) foi depositado em sua conta corrente.')
     if saldo == saldo_inicial:
         saldo += valor_deposito
     else:
         saldo += valor_deposito + saldo_inicial
-    print('DEPÓSITO REALIZADO COM SUCESSO!\n')
+    print('\nDEPÓSITO REALIZADO COM SUCESSO!\n')
 
 
 def sacar():
     global TENTATIVA_SENHA
     global saldo
     global limite_credito
+
     print('MACK BANK - SAQUE')
 
     saque_conta = int(input('INFORME O NÚMERO DA CONTA: '))
@@ -140,7 +161,7 @@ def sacar():
             limite_credito -= valor_saque
         print('SAQUE REALIZADO COM SUCESSO!\n')
     else:
-        print('SALDO INSUFICIENTE NA CONTA.')
+        print('SALDO INSUFICIENTE.')
         print('SAQUE NÃO FOI REALIZADO!\n')
         return
     lista_de_operacoes[1].append(valor_saque)
@@ -164,13 +185,14 @@ def consultar_saldo():
         saldo_senha = getpass.getpass('INFORME A SENHA: ')
     TENTATIVA_SENHA = 3
     print(f'SALDO EM CONTA: R${saldo:,.2f}')
-    print(f'LIMITE DE CRÉDITO: R${limite_credito:,.2f}')
+    print(f'LIMITE DE CRÉDITO: R${limite_credito:,.2f}\n')
     input('PRESSIONE ENTER PARA VOLTAR AO MENU...')
     os.system('cls')
 
 
 def consultar_extrato():
     global TENTATIVA_SENHA
+    global credito_inicial
     print('MACK BANK - EXTRADO DA CONTA')
     extrato_conta = int(input('INFORME O NÚMERO DA CONTA: '))
     while extrato_conta != numero_conta:
@@ -187,11 +209,14 @@ def consultar_extrato():
         extrato_senha = getpass.getpass('INFORME A SENHA: ')
     TENTATIVA_SENHA = 3
     print(f'LIMITE DE CRÉDITO: R${limite_credito:,.2f}')
+    if limite_credito < credito_inicial:
+        print(f'{vermelho}ATENÇÃO{branco}: você já utilizou R${(credito_inicial - limite_credito):,.2f} do seu limite')
     print('ÚLTIMAS OPERAÇÕES:')
     for deposito in lista_de_operacoes[0]:
-        print(f'DEPÓSITO: R${deposito:,.2f}')
+        print(f'DEPÓSITO: R${verde}{deposito:,.2f}{branco} ')
     for saque in lista_de_operacoes[1]:
-        print(f'SAQUE: R${saque:,.2f}')
+        print(f'SAQUE: R${vermelho}{saque:.2f}{branco}')
+    print(f'SALDO EM CONTA: R$ {saldo:,.2f}\n')
     input('PRESSIONE ENTER PARA VOLTAR AO MENU...')
     os.system('cls')
 
